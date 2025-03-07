@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Import necessary JavaFX components -->
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="com.example.universitymanagementsystem.DashboardController"
-      spacing="15" alignment="CENTER"
-      xmlns:fx="http://javafx.com/fxml">
+
+<!-- Root layout container: VBox (Vertical Box) -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.universitymanagementsystem.UserDashboardController"
+      alignment="CENTER" spacing="10">
+
+    <!-- Label displaying the dashboard title -->
     <Label text="User Dashboard" style="-fx-font-size: 20px;"/>
-    <Button fx:id="viewSubjectsBtn" text="View Subjects" onAction="#openSubjectManagement"/>
-    <Button fx:id="viewCoursesBtn" text="View Courses" onAction="#openCourseManagement"/>
+
+    <!-- Button to navigate to Course Management -->
+    <!-- onAction="#openCourseManagement" triggers the openCourseManagement method in UserDashboardController -->
+    <Button text="View Courses" onAction="#openCourseManagement"/>
+
+    <!-- Button to navigate to Event Management -->
+    <!-- This button was recently added -->
+    <!-- onAction="#openEventManagement" triggers the openEventManagement method in UserDashboardController -->
+    <Button text="View Events" onAction="#openEventManagement"/>
+
 </VBox>
