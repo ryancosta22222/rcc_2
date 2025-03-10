@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.universitymanagementsystem.StudentManagementController">
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <TextField fx:id="studentNameField" promptText="Student Name"/>
+            <TextField fx:id="academicLevelField" promptText="Academic Level"/>
+            <TextField fx:id="emailField" promptText="Email"/>
+            <TextField fx:id="currentSemesterField" promptText="Semester"/>
+            <Button text="Add Student" onAction="#handleAddStudent"/>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="studentTable">
+            <columns>
+                <TableColumn fx:id="studentIdColumn" text="Student ID" prefWidth="120"/>
+                <TableColumn fx:id="studentNameColumn" text="Name" prefWidth="150"/>
+                <TableColumn fx:id="academicLevelColumn" text="Academic Level" prefWidth="100"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+                <TableColumn fx:id="currentSemesterColumn" text="Semester" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

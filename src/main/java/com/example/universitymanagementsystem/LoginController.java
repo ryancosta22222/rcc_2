@@ -6,72 +6,54 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-/**
- * Controller class for handling user login.
- * This class verifies user credentials and navigates to the corresponding dashboard (Admin or User).
- */
 public class LoginController {
 
-    // FXML components linked to the Login.fxml file
-    @FXML private TextField usernameField;   // Text field where the user enters their username
-    @FXML private PasswordField passwordField;  // Password field where the user enters their password
-    @FXML private Button loginButton;   // Login button to trigger authentication
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
 
-    // Hard-coded credentials for demonstration purposes
-    private final String ADMIN_USERNAME = "admin";   // Admin username
-    private final String ADMIN_PASSWORD = "admin123"; // Admin password
-    private final String USER_USERNAME = "user";     // User (student) username
-    private final String USER_PASSWORD = "user123";  // User (student) password
+    // Hard-coded credentials for demonstration.
+    private final String ADMIN_USERNAME = "admin";
+    private final String ADMIN_PASSWORD = "admin123";
+    private final String STUDENT_USERNAME = "student";
+    private final String STUDENT_PASSWORD = "student123";
 
-    /**
-     * Handles the login button action.
-     * Validates user credentials and loads the appropriate dashboard (Admin or User).
-     *
-     * @param event The event triggered by clicking the login button.
-     */
     @FXML
     public void handleLogin(ActionEvent event) {
-        System.out.println("Login button clicked");
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
+        String fxmlToLoad = null;
+        User user = null;
 
-        // Retrieve the entered username and password from the input fields
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        String fxmlToLoad = null;  // Variable to store which FXML file to load
+        if(username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)){
+            user = new Admin(username, password);
+            fxmlToLoad = "/fxml/AdminMainLayout.fxml";
+        } else if(username.equals(STUDENT_USERNAME) && password.equals(STUDENT_PASSWORD)){
+            user = new Student(username, password);
+            fxmlToLoad = "/fxml/UserMainLayout.fxml";
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Login Error");
+            alert.setHeaderText("Invalid Credentials");
+            alert.setContentText("Please check your username and password.");
+            alert.showAndWait();
+            return;
+        }
 
-        // Check if the entered credentials match the admin credentials
-        if (username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
-            fxmlToLoad = "/fxml/AdminDashboard.fxml"; // Load the Admin Dashboard
-        }
-        // Check if the entered credentials match the user credentials
-        else if (username.equals(USER_USERNAME) && password.equals(USER_PASSWORD)) {
-            fxmlToLoad = "/fxml/UserDashboard.fxml"; // Load the User Dashboard
-        }
-        // If credentials do not match, print an error message and return
-        else {
-            System.out.println("Invalid credentials");
-            return; // Exit the method without changing the scene
-        }
+        // Save logged-in user.
+        Session.getInstance().setUser(user);
 
         try {
-            // Load the corresponding FXML file based on the determined role
-            Parent dashboard = FXMLLoader.load(getClass().getResource(fxmlToLoad));
-
-            // Get the current stage (window) using the event source (button click)
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlToLoad));
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-
-            // Set the new scene (dashboard) in the current stage
-            stage.setScene(new Scene(dashboard));
-
-            // Display the updated stage with the selected dashboard
+            stage.setScene(new Scene(root));
             stage.show();
-        } catch (IOException e) {
-            // Print error details if the FXML file fails to load
+        } catch(IOException e){
             e.printStackTrace();
         }
     }

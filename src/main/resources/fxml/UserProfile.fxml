@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.universitymanagementsystem.UserProfileController"
+      spacing="10" alignment="CENTER"
+      style="-fx-padding: 20;">
+    <Label text="User Profile" style="-fx-font-size: 20px;"/>
+    <Label text="Username:"/>
+    <Label fx:id="usernameLabel" style="-fx-font-size: 16px;"/>
+    <Label text="Role:"/>
+    <Label fx:id="roleLabel" style="-fx-font-size: 16px;"/>
+</VBox>

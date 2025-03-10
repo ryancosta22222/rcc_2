@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.universitymanagementsystem.SubjectManagementController">
+    <top>
+        <Label text="Subject Management" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+    </top>
+    <center>
+        <TableView fx:id="subjectTable">
+            <columns>
+                <TableColumn fx:id="codeColumn" text="Subject Code" prefWidth="150"/>
+                <TableColumn fx:id="nameColumn" text="Subject Name" prefWidth="250"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <TextField fx:id="subjectCodeField" promptText="Subject Code"/>
+            <TextField fx:id="subjectNameField" promptText="Subject Name"/>
+            <Button text="Add Subject" onAction="#handleAddSubject"/>
+        </HBox>
+    </bottom>
+</BorderPane>

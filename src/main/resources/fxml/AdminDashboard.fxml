@@ -1,31 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- Import necessary JavaFX components -->
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-
-<!-- Root layout container: VBox (Vertical Box) -->
-<VBox fx:controller="com.example.universitymanagementsystem.DashboardController"
-      spacing="15" alignment="CENTER"
-      xmlns:fx="http://javafx.com/fxml">
-
-    <!-- Label for the dashboard title -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.universitymanagementsystem.AdminDashboardController"
+      spacing="10" alignment="CENTER"
+      style="-fx-padding: 20;">
     <Label text="Admin Dashboard" style="-fx-font-size: 20px;"/>
-
-    <!-- Button for Subject Management -->
-    <!-- fx:id="subjectMgmtBtn" links this button to a corresponding field in the DashboardController class -->
-    <!-- onAction="#openSubjectManagement" binds this button to a method in the controller -->
-    <Button fx:id="subjectMgmtBtn" text="Subject Management" onAction="#openSubjectManagement"/>
-
-    <!-- Button for Course Management -->
-    <!-- fx:id="courseMgmtBtn" associates the button with the controller -->
-    <!-- onAction="#openCourseManagement" calls the respective method when clicked -->
-    <Button fx:id="courseMgmtBtn" text="Course Management" onAction="#openCourseManagement"/>
-
-    <!-- Button for Faculty Management -->
-    <!-- fx:id="facultyMgmtBtn" connects this button to the controller -->
-    <!-- onAction="#openFacultyManagement" triggers the method in the controller when clicked -->
-    <Button fx:id="facultyMgmtBtn" text="Faculty Management" onAction="#openFacultyManagement"/>
-
+    <Label fx:id="welcomeLabel" style="-fx-font-size: 16px;"/>
 </VBox>
