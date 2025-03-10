@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Import necessary JavaFX components -->
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Root layout container: VBox (Vertical Box) -->
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.universitymanagementsystem.UserEventsController"
+      alignment="CENTER" spacing="10">
+
+    <!-- Label displaying the title of the events section -->
+    <Label text="Upcoming Events" style="-fx-font-size: 20px;"/>
+
+    <!-- TableView to display a list of upcoming events -->
+    <TableView fx:id="eventTable">
+        <columns>
+            <!-- Column for Event Code -->
+            <TableColumn fx:id="eventCodeColumn" text="Event Code" prefWidth="100"/>
+
+            <!-- Column for Event Name -->
+            <TableColumn fx:id="eventNameColumn" text="Event Name" prefWidth="200"/>
+
+            <!-- Column for Event Description -->
+            <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250"/>
+
+            <!-- Column for Event Location -->
+            <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
+
+            <!-- Column for Date and Time of the Event -->
+            <TableColumn fx:id="dateTimeColumn" text="Date and Time" prefWidth="150"/>
+
+            <!-- Column for Event Capacity (Number of Attendees Allowed) -->
+            <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
+
+            <!-- Column for Event Cost -->
+            <TableColumn fx:id="costColumn" text="Cost" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+</VBox>
