@@ -1,39 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.universitymanagementsystem.EventManagementController">
     <top>
-        <Label text="Event Management" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+        <Label text="Event Management (Admin)" style="-fx-font-size: 18px; -fx-padding: 10;"/>
     </top>
     <center>
-        <TableView fx:id="eventTable">
-            <columns>
-                <TableColumn fx:id="eventCodeColumn" text="Event Code" prefWidth="100"/>
-                <TableColumn fx:id="eventNameColumn" text="Event Name" prefWidth="200"/>
-                <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="250"/>
-                <TableColumn fx:id="locationColumn" text="Location" prefWidth="150"/>
-                <TableColumn fx:id="dateTimeColumn" text="Date &amp; Time" prefWidth="150"/>
-                <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
-                <TableColumn fx:id="costColumn" text="Cost" prefWidth="100"/>
-            </columns>
-        </TableView>
+        <SplitPane>
+            <items>
+                <!-- Left side: Table of Events -->
+                <VBox spacing="10">
+                    <TableView fx:id="eventTable" prefWidth="500" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="eventCodeColumn" text="Event Code" prefWidth="80"/>
+                            <TableColumn fx:id="eventNameColumn" text="Event Name" prefWidth="120"/>
+                            <TableColumn fx:id="locationColumn" text="Location" prefWidth="100"/>
+                            <TableColumn fx:id="dateTimeColumn" text="Date &amp; Time" prefWidth="120"/>
+                            <TableColumn fx:id="costColumn" text="Cost" prefWidth="80"/>
+                            <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 5;">
+                        <Button text="Add" onAction="#handleAddEvent"/>
+                        <Button text="Edit" onAction="#handleEditEvent"/>
+                        <Button text="Delete" onAction="#handleDeleteEvent"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Right side: Event Details & Registrations -->
+                <VBox spacing="10" style="-fx-padding: 10;">
+                    <Label text="Selected Event Details" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="eventCodeField" promptText="Event Code"/>
+                    <TextField fx:id="eventNameField" promptText="Event Name"/>
+                    <TextField fx:id="descriptionField" promptText="Description"/>
+                    <Label text="Header Image Path:"/>
+                    <HBox spacing="5">
+                        <Label fx:id="headerImageLabel" text="default_header.png"/>
+                        <Button text="Upload" onAction="#handleUploadImage"/>
+                    </HBox>
+                    <TextField fx:id="locationField" promptText="Location"/>
+                    <TextField fx:id="dateTimeField" promptText="Date &amp; Time"/>
+                    <TextField fx:id="costField" promptText="Cost"/>
+                    <TextField fx:id="capacityField" promptText="Capacity"/>
+                    <Label text="Registered Students:" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="registeredStudentsList" prefHeight="100"/>
+                    <HBox spacing="5">
+                        <Button text="Remove Student" onAction="#handleRemoveSelectedRegistration"/>
+                        <Button text="Generate Attendee List" onAction="#handleGenerateAttendeeList"/>
+                    </HBox>
+                </VBox>
+            </items>
+        </SplitPane>
     </center>
-    <bottom>
-        <HBox spacing="10" style="-fx-padding: 10;">
-            <TextField fx:id="eventCodeField" promptText="Event Code"/>
-            <TextField fx:id="eventNameField" promptText="Event Name"/>
-            <TextField fx:id="descriptionField" promptText="Description"/>
-            <TextField fx:id="locationField" promptText="Location"/>
-            <TextField fx:id="dateTimeField" promptText="Date &amp; Time"/>
-            <TextField fx:id="capacityField" promptText="Capacity"/>
-            <TextField fx:id="costField" promptText="Cost"/>
-            <Button text="Add Event" onAction="#handleAddEvent"/>
-        </HBox>
-    </bottom>
 </BorderPane>
