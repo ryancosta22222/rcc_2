@@ -8,4 +8,6 @@
     <Label text="User Dashboard" style="-fx-font-size: 20px;"/>
     <Button text="View Courses" onAction="#openCourseManagement"/>
     <Button text="View Events" onAction="#openEventManagement"/>
+    <!-- New Button for viewing subjects -->
+    <Button text="View Subjects" onAction="#openSubjects"/>
 </VBox>

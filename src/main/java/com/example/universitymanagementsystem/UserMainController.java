@@ -57,6 +57,8 @@ public class UserMainController {
         }
     }
 
+
+
     private void loadCenter(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));

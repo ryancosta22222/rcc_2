@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.universitymanagementsystem.StudentSubjectController">
+    <top>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <children>
+                <Label text="Subjects" style="-fx-font-size: 18px;"/>
+                <TextField fx:id="subjectSearchField" promptText="Search Subjects"/>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <TableView fx:id="subjectTable">
+            <columns>
+                <TableColumn fx:id="codeColumn" text="Subject Code" prefWidth="150"/>
+                <TableColumn fx:id="nameColumn" text="Subject Name" prefWidth="250"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>

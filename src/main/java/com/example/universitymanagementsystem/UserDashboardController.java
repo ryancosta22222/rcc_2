@@ -18,10 +18,16 @@ public class UserDashboardController {
 
     @FXML
     private void openEventManagement(ActionEvent event) throws IOException {
-        System.out.println("openEventManagement triggered."); // Debug statement to verify the method is called
         navigateTo(event, "/fxml/UserEvents.fxml");
     }
 
+    // NEW: Opens the Subjects view for students
+    @FXML
+    public void openSubjects(ActionEvent event) throws IOException {
+        navigateTo(event, "/fxml/StudentSubject.fxml");
+    }
+
+    // Helper method to load an FXML file and set it as the current scene
     private void navigateTo(ActionEvent event, String fxmlFile) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();

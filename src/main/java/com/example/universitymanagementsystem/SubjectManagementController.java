@@ -16,7 +16,7 @@ public class SubjectManagementController {
 
     @FXML private TextField subjectCodeField;
     @FXML private TextField subjectNameField;
-    @FXML private TextField subjectSearchField; // Search field for filtering subjects
+    @FXML private TextField subjectSearchField; // For filtering subjects
     @FXML private Button addSubjectBtn;         // Button for adding a subject
     @FXML private Button editSubjectBtn;        // Button for editing a subject
     @FXML private Button deleteSubjectBtn;      // Button for deleting a subject
@@ -25,10 +25,10 @@ public class SubjectManagementController {
     @FXML private TableColumn<Subject, String> codeColumn;
     @FXML private TableColumn<Subject, String> nameColumn;
 
-    // Use a static list so that changes persist across different sessions/views
+    // Static subject list shared by both admin and student modules
     private static ObservableList<Subject> subjectList = FXCollections.observableArrayList();
 
-    // Keep track of the subject currently selected (for editing/deleting)
+    // Track the selected subject (for editing/deleting)
     private Subject selectedSubject = null;
 
     @FXML
@@ -36,7 +36,7 @@ public class SubjectManagementController {
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-        // Initialize the static list with sample data if it is empty
+        // Initialize sample subjects if the list is empty
         if (subjectList.isEmpty()) {
             subjectList.addAll(
                     new Subject("MATH001", "Mathematics"),
@@ -51,7 +51,7 @@ public class SubjectManagementController {
             );
         }
 
-        // Set up search functionality: filter subjects by code or name
+        // Set up search functionality
         FilteredList<Subject> filteredData = new FilteredList<>(subjectList, p -> true);
         subjectSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(subject -> {
@@ -67,7 +67,7 @@ public class SubjectManagementController {
         sortedData.comparatorProperty().bind(subjectTable.comparatorProperty());
         subjectTable.setItems(sortedData);
 
-        // When a subject is selected in the table, populate the input fields
+        // Populate fields when a subject is selected
         subjectTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             selectedSubject = newSelection;
             if (newSelection != null) {
@@ -76,7 +76,7 @@ public class SubjectManagementController {
             }
         });
 
-        // Disable modification controls if the current user is a student
+        // Disable editing controls for students
         User currentUser = Session.getInstance().getUser();
         if (currentUser != null && currentUser.getRole().equalsIgnoreCase("STUDENT")) {
             addSubjectBtn.setDisable(true);
@@ -97,7 +97,7 @@ public class SubjectManagementController {
             return;
         }
 
-        // Check for unique subject code
+        // Ensure unique subject code
         for (Subject s : subjectList) {
             if (s.getCode().equalsIgnoreCase(code)) {
                 showAlert(Alert.AlertType.WARNING, "Validation Error", "Subject code must be unique.");
@@ -124,7 +124,7 @@ public class SubjectManagementController {
             return;
         }
 
-        // If the subject code has been changed, ensure uniqueness
+        // Check uniqueness if subject code has changed
         if (!selectedSubject.getCode().equalsIgnoreCase(code)) {
             for (Subject s : subjectList) {
                 if (s.getCode().equalsIgnoreCase(code)) {
@@ -134,7 +134,6 @@ public class SubjectManagementController {
             }
         }
 
-        // Update the subject in the list
         int index = subjectList.indexOf(selectedSubject);
         if (index >= 0) {
             subjectList.set(index, new Subject(code, name));
@@ -168,7 +167,12 @@ public class SubjectManagementController {
         alert.showAndWait();
     }
 
-    // Inner class representing a Subject data record
+    // Public static getter so other modules (like student view) can access the subject list
+    public static ObservableList<Subject> getSubjectList() {
+        return subjectList;
+    }
+
+    // Inner class representing a subject record
     public static class Subject {
         private final String code;
         private final String name;
