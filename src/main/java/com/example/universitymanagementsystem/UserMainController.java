@@ -19,9 +19,13 @@ public class UserMainController {
     @FXML
     private Button dashboardBtn, courseMgmtBtn, eventMgmtBtn, profileBtn, logoutBtn;
 
+    // NEW: Button for loading the Subjects module
+    @FXML
+    private Button subjectsBtn;
+
     @FXML
     private void initialize() {
-        // Load default view: User Dashboard.
+        // Load the default view (User Dashboard) into the center area.
         loadCenter("/fxml/UserDashboard.fxml");
     }
 
@@ -45,25 +49,30 @@ public class UserMainController {
         loadCenter("/fxml/UserProfile.fxml");
     }
 
+    // NEW: Loads the StudentSubject.fxml into the center
+    @FXML
+    private void loadSubjects(ActionEvent event) {
+        loadCenter("/fxml/StudentSubject.fxml");
+    }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
             Parent login = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
-            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(login));
             stage.show();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-
+    // Helper method to load an FXML into the center of the BorderPane
     private void loadCenter(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
             mainLayout.setCenter(node);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
