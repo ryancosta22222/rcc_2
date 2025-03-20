@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -28,14 +30,14 @@ public class EventManagementController {
     @FXML private TextField costField;
     @FXML private TextField capacityField;
     @FXML private Label headerImageLabel;
+    @FXML private ImageView headerImageView;  // For displaying the image
 
-    // For showing the list of registered students
     @FXML private ListView<String> registeredStudentsList;
 
-    // The static list of events that admin & students share
+    // Shared event list
     private static ObservableList<Event> eventList = FXCollections.observableArrayList();
 
-    // Track the currently selected event
+    // Currently selected event
     private Event selectedEvent = null;
 
     @FXML
@@ -47,7 +49,7 @@ public class EventManagementController {
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
 
-        // Sample data if empty
+        // Initialize with sample data if empty
         if (eventList.isEmpty()) {
             eventList.addAll(
                     new Event("EV001", "Welcome Seminar", "Orientation week", "default_header.png",
@@ -59,7 +61,7 @@ public class EventManagementController {
 
         eventTable.setItems(eventList);
 
-        // Update form fields when an event is selected
+        // When an event is selected, populate the fields and load the image
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedEvent = newVal;
             if (newVal != null) {
@@ -67,28 +69,30 @@ public class EventManagementController {
                 eventNameField.setText(newVal.getEventName());
                 descriptionField.setText(newVal.getDescription());
                 headerImageLabel.setText(newVal.getHeaderImagePath());
+                // Load image into the ImageView.
+                // For default images, assume they're in the resources under /images/
+                if (newVal.getHeaderImagePath().startsWith("default")) {
+                    String imagePath = getClass().getResource("/images/" + newVal.getHeaderImagePath()).toExternalForm();
+                    headerImageView.setImage(new Image(imagePath));
+                } else {
+                    headerImageView.setImage(new Image(newVal.getHeaderImagePath()));
+                }
                 locationField.setText(newVal.getLocation());
                 dateTimeField.setText(newVal.getDateTime());
                 costField.setText(newVal.getCost());
                 capacityField.setText(String.valueOf(newVal.getCapacity()));
-
-                // Show the list of registered students
                 registeredStudentsList.setItems(newVal.getRegisteredStudents());
             } else {
                 clearFields();
             }
         });
 
-        // If a Student is logged in, disable all editing controls
         User currentUser = Session.getInstance().getUser();
         if (currentUser != null && "STUDENT".equalsIgnoreCase(currentUser.getRole())) {
             disableAdminControls();
         }
     }
 
-    /**
-     * Add a new event
-     */
     @FXML
     private void handleAddEvent() {
         try {
@@ -101,12 +105,10 @@ public class EventManagementController {
             String cost = costField.getText().trim();
             int cap = Integer.parseInt(capacityField.getText().trim());
 
-            // Basic validation
             if (code.isEmpty() || name.isEmpty() || loc.isEmpty() || dt.isEmpty()) {
                 throw new IllegalArgumentException("Code, Name, Location, and DateTime are required.");
             }
 
-            // Check for unique code
             for (Event e : eventList) {
                 if (e.getEventCode().equalsIgnoreCase(code)) {
                     showAlert(Alert.AlertType.WARNING, "Validation Error", "Event code must be unique.");
@@ -114,7 +116,6 @@ public class EventManagementController {
                 }
             }
 
-            // If no header image chosen, use a default
             if (headerImg.isEmpty()) {
                 headerImg = "default_header.png";
             }
@@ -130,9 +131,6 @@ public class EventManagementController {
         }
     }
 
-    /**
-     * Edit the currently selected event
-     */
     @FXML
     private void handleEditEvent() {
         if (selectedEvent == null) {
@@ -150,12 +148,10 @@ public class EventManagementController {
             String cost = costField.getText().trim();
             int cap = Integer.parseInt(capacityField.getText().trim());
 
-            // Basic validation
             if (code.isEmpty() || name.isEmpty() || loc.isEmpty() || dt.isEmpty()) {
                 throw new IllegalArgumentException("Code, Name, Location, and DateTime are required.");
             }
 
-            // If the event code has changed, check uniqueness
             if (!selectedEvent.getEventCode().equalsIgnoreCase(code)) {
                 for (Event e : eventList) {
                     if (e.getEventCode().equalsIgnoreCase(code)) {
@@ -165,7 +161,6 @@ public class EventManagementController {
                 }
             }
 
-            // Update the selected event
             selectedEvent.setEventCode(code);
             selectedEvent.setEventName(name);
             selectedEvent.setDescription(desc);
@@ -175,7 +170,6 @@ public class EventManagementController {
             selectedEvent.setCost(cost);
             selectedEvent.setCapacity(cap);
 
-            // Force UI refresh
             eventTable.refresh();
             clearFields();
         } catch (NumberFormatException ex) {
@@ -185,9 +179,6 @@ public class EventManagementController {
         }
     }
 
-    /**
-     * Delete the currently selected event
-     */
     @FXML
     private void handleDeleteEvent() {
         if (selectedEvent == null) {
@@ -199,9 +190,6 @@ public class EventManagementController {
         clearFields();
     }
 
-    /**
-     * Opens a FileChooser to let the admin pick a new header image.
-     */
     @FXML
     private void handleUploadImage() {
         FileChooser fileChooser = new FileChooser();
@@ -211,13 +199,10 @@ public class EventManagementController {
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
             headerImageLabel.setText(selectedFile.getAbsolutePath());
+            headerImageView.setImage(new Image(selectedFile.toURI().toString()));
         }
     }
 
-    /**
-     * Generates an attendee list for the selected event (placeholder).
-     * You could export to CSV, print a PDF, etc.
-     */
     @FXML
     private void handleGenerateAttendeeList() {
         if (selectedEvent == null) {
@@ -231,13 +216,9 @@ public class EventManagementController {
             sb.append(student).append("\n");
         }
 
-        // In a real app, you'd write this to a file or send it somewhere
         showAlert(Alert.AlertType.INFORMATION, "Attendee List", sb.toString());
     }
 
-    /**
-     * Optionally remove a student from the event’s registration.
-     */
     @FXML
     private void handleRemoveSelectedRegistration() {
         if (selectedEvent == null) {
@@ -250,14 +231,12 @@ public class EventManagementController {
         }
     }
 
-    /**
-     * Clears all input fields and deselects the event in the table.
-     */
     private void clearFields() {
         eventCodeField.clear();
         eventNameField.clear();
         descriptionField.clear();
         headerImageLabel.setText("");
+        headerImageView.setImage(null);
         locationField.clear();
         dateTimeField.clear();
         costField.clear();
@@ -279,19 +258,13 @@ public class EventManagementController {
         eventNameField.setDisable(true);
         descriptionField.setDisable(true);
         headerImageLabel.setDisable(true);
+        headerImageView.setDisable(true);
         locationField.setDisable(true);
         dateTimeField.setDisable(true);
         costField.setDisable(true);
         capacityField.setDisable(true);
-
-        // Buttons
-        // (Disable them if you truly don't want a student to do any changes.)
-        // handleAddEvent, handleEditEvent, handleDeleteEvent, etc.
     }
 
-    /**
-     * Provides the shared event list so user controllers can access the same data.
-     */
     public static ObservableList<Event> getEventList() {
         return eventList;
     }
