@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
+
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.universitymanagementsystem.SubjectManagementController">
     <top>
-        <Label text="Subject Management" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <children>
+                <Label text="Subject Management" style="-fx-font-size: 18px;"/>
+                <TextField fx:id="subjectSearchField" promptText="Search Subjects"/>
+            </children>
+        </VBox>
     </top>
     <center>
         <TableView fx:id="subjectTable">
@@ -21,9 +29,13 @@
     </center>
     <bottom>
         <HBox spacing="10" style="-fx-padding: 10;">
-            <TextField fx:id="subjectCodeField" promptText="Subject Code"/>
-            <TextField fx:id="subjectNameField" promptText="Subject Name"/>
-            <Button text="Add Subject" onAction="#handleAddSubject"/>
+            <children>
+                <TextField fx:id="subjectCodeField" promptText="Subject Code"/>
+                <TextField fx:id="subjectNameField" promptText="Subject Name"/>
+                <Button fx:id="addSubjectBtn" text="Add Subject" onAction="#handleAddSubject"/>
+                <Button fx:id="editSubjectBtn" text="Edit Subject" onAction="#handleEditSubject"/>
+                <Button fx:id="deleteSubjectBtn" text="Delete Subject" onAction="#handleDeleteSubject"/>
+            </children>
         </HBox>
     </bottom>
 </BorderPane>
