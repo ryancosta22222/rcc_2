@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class UserEventsController {
 
@@ -16,10 +18,11 @@ public class UserEventsController {
     @FXML private TableColumn<Event, Number> capacityColumn;
 
     @FXML private ListView<String> myRegisteredEventsList;
-    @FXML private Label eventDetailsLabel; // show details of selected event
+    @FXML private Label eventDetailsLabel; // shows details of the selected event
     @FXML private Button registerButton;
+    @FXML private ImageView eventHeaderImageView; // new ImageView to show header image
 
-    // The student’s own list of events (by code) or a direct reference
+    // The student’s own list of registered event codes.
     private ObservableList<String> myRegisteredEventCodes = FXCollections.observableArrayList();
 
     @FXML
@@ -30,10 +33,10 @@ public class UserEventsController {
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
 
-        // Show the shared event list
+        // Load the shared event list.
         allEventsTable.setItems(EventManagementController.getEventList());
 
-        // When user selects an event, display details
+        // When a student selects an event, update the details, including the header image.
         allEventsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 String info = "Event: " + newVal.getEventName() + "\n" +
@@ -43,18 +46,27 @@ public class UserEventsController {
                         "Description: " + newVal.getDescription() + "\n" +
                         "Capacity: " + newVal.getCapacity() + "\n" +
                         "Cost: " + newVal.getCost() + "\n" +
-                        "Registered: " + newVal.getRegisteredStudents().size() + "\n" +
-                        "Header Image: " + newVal.getHeaderImagePath();
+                        "Registered: " + newVal.getRegisteredStudents().size();
                 eventDetailsLabel.setText(info);
+
+                // Load the header image.
+                if (newVal.getHeaderImagePath().startsWith("default")) {
+                    // Load default image from resources under /images/
+                    String imagePath = getClass().getResource("/images/" + newVal.getHeaderImagePath()).toExternalForm();
+                    eventHeaderImageView.setImage(new Image(imagePath));
+                } else {
+                    // Load the image from the file system (or URL).
+                    eventHeaderImageView.setImage(new Image(newVal.getHeaderImagePath()));
+                }
             } else {
                 eventDetailsLabel.setText("");
+                eventHeaderImageView.setImage(null);
             }
         });
 
-        // Populate the student’s currently registered events if needed
         myRegisteredEventsList.setItems(myRegisteredEventCodes);
 
-        // If an admin logs in by mistake, hide the register button
+        // Disable the register button if an admin is logged in.
         User currentUser = Session.getInstance().getUser();
         if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {
             registerButton.setDisable(true);
@@ -62,7 +74,7 @@ public class UserEventsController {
     }
 
     /**
-     * Called when the student clicks "Register" for the selected event.
+     * Called when a student clicks "Register" for the selected event.
      */
     @FXML
     private void handleRegisterForEvent() {
@@ -78,25 +90,20 @@ public class UserEventsController {
             return;
         }
 
-        // Check capacity
         if (!selectedEvent.canRegister()) {
             showAlert(Alert.AlertType.WARNING, "Capacity Reached",
                     "Sorry, this event has reached its maximum capacity.");
             return;
         }
 
-        // Check if already registered
         if (selectedEvent.getRegisteredStudents().contains(currentUser.getUsername())) {
             showAlert(Alert.AlertType.INFORMATION, "Already Registered",
                     "You have already registered for this event.");
             return;
         }
 
-        // Register
         selectedEvent.getRegisteredStudents().add(currentUser.getUsername());
         myRegisteredEventCodes.add(selectedEvent.getEventCode());
-
-        // (Optional) “Send” a confirmation email
         sendConfirmationEmail(currentUser.getUsername(), selectedEvent);
 
         showAlert(Alert.AlertType.INFORMATION, "Registration Successful",
@@ -104,10 +111,9 @@ public class UserEventsController {
     }
 
     /**
-     * Simple placeholder method for sending a confirmation email.
+     * Placeholder for sending a confirmation email.
      */
     private void sendConfirmationEmail(String studentUsername, Event event) {
-        // In a real app, integrate an email API or service
         System.out.println("Sending confirmation email to " + studentUsername + " for event " + event.getEventCode());
     }
 
