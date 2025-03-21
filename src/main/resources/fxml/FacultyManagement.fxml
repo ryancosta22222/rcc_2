@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.universitymanagementsystem.FacultyManagementController">
     <top>
-        <Label text="Faculty Management" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+        <Label text="Faculty Management (Admin)" style="-fx-font-size: 18px; -fx-padding: 10;"/>
     </top>
     <center>
-        <TableView fx:id="facultyTable">
-            <columns>
-                <TableColumn fx:id="idColumn" text="Faculty ID" prefWidth="100"/>
-                <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
-                <TableColumn fx:id="degreeColumn" text="Degree" prefWidth="100"/>
-                <TableColumn fx:id="researchColumn" text="Research Interest" prefWidth="200"/>
-                <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
-                <TableColumn fx:id="officeColumn" text="Office" prefWidth="100"/>
-            </columns>
-        </TableView>
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <TableView fx:id="facultyTable" prefHeight="300" prefWidth="600">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="Faculty ID" prefWidth="80"/>
+                    <TableColumn fx:id="nameColumn" text="Name" prefWidth="150"/>
+                    <TableColumn fx:id="degreeColumn" text="Degree" prefWidth="80"/>
+                    <TableColumn fx:id="researchColumn" text="Research Interest" prefWidth="150"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+                    <TableColumn fx:id="officeColumn" text="Office" prefWidth="80"/>
+                    <TableColumn fx:id="coursesColumn" text="Courses Offered" prefWidth="150"/>
+                </columns>
+            </TableView>
+            <HBox spacing="10">
+                <TextField fx:id="idField" promptText="Faculty ID"/>
+                <TextField fx:id="nameField" promptText="Name"/>
+                <TextField fx:id="degreeField" promptText="Degree"/>
+                <TextField fx:id="researchField" promptText="Research Interest"/>
+                <TextField fx:id="emailField" promptText="Email"/>
+                <TextField fx:id="officeField" promptText="Office Location"/>
+                <TextField fx:id="coursesField" promptText="Courses Offered"/>
+            </HBox>
+            <HBox spacing="10">
+                <Button text="Add Faculty" onAction="#handleAddFaculty"/>
+                <Button text="Edit Faculty" onAction="#handleEditFaculty"/>
+                <Button text="Delete Faculty" onAction="#handleDeleteFaculty"/>
+            </HBox>
+        </VBox>
     </center>
-    <bottom>
-        <BorderPane>
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <left>
-                <TextField fx:id="idField" promptText="Faculty ID" prefWidth="100"/>
-            </left>
-            <center>
-                <TextField fx:id="nameField" promptText="Name" prefWidth="200"/>
-            </center>
-            <right>
-                <TextField fx:id="emailField" promptText="Email" prefWidth="200"/>
-            </right>
-            <bottom>
-                <Button text="Add Faculty" onAction="#handleAddFaculty" BorderPane.alignment="CENTER"/>
-            </bottom>
-        </BorderPane>
-    </bottom>
 </BorderPane>

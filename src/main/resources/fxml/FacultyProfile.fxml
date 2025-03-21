@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.universitymanagementsystem.FacultyProfileController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+    <children>
+        <Label text="Faculty Profile" style="-fx-font-size: 20px;"/>
+        <ImageView fx:id="profilePhotoView" fitWidth="150" fitHeight="150" preserveRatio="true"/>
+        <Label text="Name:"/>
+        <Label fx:id="nameLabel"/>
+        <Label text="Degree:"/>
+        <Label fx:id="degreeLabel"/>
+        <Label text="Research Interest:"/>
+        <Label fx:id="researchLabel"/>
+        <Label text="Email:"/>
+        <Label fx:id="emailLabel"/>
+        <Label text="Office Location:"/>
+        <Label fx:id="officeLabel"/>
+        <Label text="Courses Offered:"/>
+        <Label fx:id="coursesLabel"/>
+        <HBox spacing="10">
+            <children>
+                <TextField fx:id="newPasswordField" promptText="New Password"/>
+                <Button fx:id="updatePasswordButton" text="Update Password" onAction="#handleUpdatePassword"/>
+            </children>
+        </HBox>
+        <Button fx:id="uploadPhotoButton" text="Upload Profile Photo" onAction="#handleUploadPhoto"/>
+    </children>
+</VBox>

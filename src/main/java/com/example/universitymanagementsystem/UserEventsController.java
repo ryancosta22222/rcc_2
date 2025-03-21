@@ -20,13 +20,16 @@ public class UserEventsController {
     @FXML private ListView<String> myRegisteredEventsList;
     @FXML private Label eventDetailsLabel; // shows details of the selected event
     @FXML private Button registerButton;
-    @FXML private ImageView eventHeaderImageView; // new ImageView to show header image
+    @FXML private ImageView eventHeaderImageView; // displays header image for the event
 
     // The student’s own list of registered event codes.
     private ObservableList<String> myRegisteredEventCodes = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
+        // Disable caching on the ImageView so that images update properly.
+        eventHeaderImageView.setCache(false);
+
         eventCodeColumn.setCellValueFactory(new PropertyValueFactory<>("eventCode"));
         eventNameColumn.setCellValueFactory(new PropertyValueFactory<>("eventName"));
         dateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
@@ -36,7 +39,7 @@ public class UserEventsController {
         // Load the shared event list.
         allEventsTable.setItems(EventManagementController.getEventList());
 
-        // When a student selects an event, update the details, including the header image.
+        // When a student selects an event, update details and load its header image.
         allEventsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 String info = "Event: " + newVal.getEventName() + "\n" +
@@ -49,14 +52,14 @@ public class UserEventsController {
                         "Registered: " + newVal.getRegisteredStudents().size();
                 eventDetailsLabel.setText(info);
 
-                // Load the header image.
+                // Load the header image for the selected event.
                 if (newVal.getHeaderImagePath().startsWith("default")) {
                     // Load default image from resources under /images/
                     String imagePath = getClass().getResource("/images/" + newVal.getHeaderImagePath()).toExternalForm();
-                    eventHeaderImageView.setImage(new Image(imagePath));
+                    eventHeaderImageView.setImage(new Image(imagePath, 200, 150, true, true, false));
                 } else {
-                    // Load the image from the file system (or URL).
-                    eventHeaderImageView.setImage(new Image(newVal.getHeaderImagePath()));
+                    // Load the image from the absolute file path or URL.
+                    eventHeaderImageView.setImage(new Image(newVal.getHeaderImagePath(), 200, 150, true, true, false));
                 }
             } else {
                 eventDetailsLabel.setText("");
@@ -66,7 +69,7 @@ public class UserEventsController {
 
         myRegisteredEventsList.setItems(myRegisteredEventCodes);
 
-        // Disable the register button if an admin is logged in.
+        // If an admin somehow logs in here, disable the register button.
         User currentUser = Session.getInstance().getUser();
         if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {
             registerButton.setDisable(true);
@@ -74,7 +77,7 @@ public class UserEventsController {
     }
 
     /**
-     * Called when a student clicks "Register" for the selected event.
+     * Called when the student clicks "Register" for the selected event.
      */
     @FXML
     private void handleRegisterForEvent() {

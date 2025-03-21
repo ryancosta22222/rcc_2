@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.universitymanagementsystem.FacultyListController">
+    <top>
+        <Label text="Faculty Profiles" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+    </top>
+    <center>
+        <TableView fx:id="facultyTable" prefHeight="300" prefWidth="600">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="150"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+                <TableColumn fx:id="officeColumn" text="Office Location" prefWidth="100"/>
+                <TableColumn fx:id="researchColumn" text="Research Interest" prefWidth="200"/>
+            </columns>
+        </TableView>
+    </center>
+</BorderPane>
