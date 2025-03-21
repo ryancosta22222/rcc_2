@@ -17,7 +17,8 @@ public class AdminMainController {
     private BorderPane mainLayout;  // The outer layout from AdminMainLayout.fxml
 
     @FXML
-    private Button dashboardBtn, subjectMgmtBtn, courseMgmtBtn, studentMgmtBtn, eventMgmtBtn, logoutBtn;
+    private Button dashboardBtn, subjectMgmtBtn, courseMgmtBtn, studentMgmtBtn,
+            eventMgmtBtn, facultyMgmtBtn, logoutBtn;
 
     @FXML
     private void initialize() {
@@ -51,6 +52,12 @@ public class AdminMainController {
         loadCenter("/fxml/EventManagement.fxml");
     }
 
+    // NEW: Loads Faculty Management view.
+    @FXML
+    private void loadFacultyManagement(ActionEvent event) {
+        loadCenter("/fxml/FacultyManagement.fxml");
+    }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
@@ -58,7 +65,7 @@ public class AdminMainController {
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(login));
             stage.show();
-        } catch(IOException e) {
+        } catch(IOException e){
             e.printStackTrace();
         }
     }

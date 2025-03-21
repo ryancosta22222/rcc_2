@@ -15,6 +15,8 @@
             <Button fx:id="courseMgmtBtn" text="Courses" onAction="#loadCourseManagement" style="-fx-pref-width: 150;"/>
             <Button fx:id="studentMgmtBtn" text="Students" onAction="#loadStudentManagement" style="-fx-pref-width: 150;"/>
             <Button fx:id="eventMgmtBtn" text="Events" onAction="#loadEventManagement" style="-fx-pref-width: 150;"/>
+            <!-- NEW: Faculty Management Button -->
+            <Button fx:id="facultyMgmtBtn" text="Faculty Management" onAction="#loadFacultyManagement" style="-fx-pref-width: 150;"/>
             <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout" style="-fx-pref-width: 150;"/>
         </VBox>
     </left>

@@ -17,11 +17,7 @@ public class UserMainController {
     private BorderPane mainLayout;
 
     @FXML
-    private Button dashboardBtn, courseMgmtBtn, eventMgmtBtn, profileBtn, logoutBtn;
-
-    // NEW: Button for loading the Subjects module
-    @FXML
-    private Button subjectsBtn;
+    private Button dashboardBtn, courseMgmtBtn, eventMgmtBtn, profileBtn, facultyBtn, logoutBtn;
 
     @FXML
     private void initialize() {
@@ -49,20 +45,20 @@ public class UserMainController {
         loadCenter("/fxml/UserProfile.fxml");
     }
 
-    // NEW: Loads the StudentSubject.fxml into the center
+    // NEW: Loads Faculty Profiles view (for students)
     @FXML
-    private void loadSubjects(ActionEvent event) {
-        loadCenter("/fxml/StudentSubject.fxml");
+    private void loadFacultyProfiles(ActionEvent event) {
+        loadCenter("/fxml/FacultyList.fxml");
     }
 
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
             Parent login = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(login));
             stage.show();
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
