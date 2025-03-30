@@ -1,12 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:controller="com.example.universitymanagementsystem.LoginController"
-      spacing="10" alignment="CENTER"
-      xmlns:fx="http://javafx.com/fxml">
-   <TextField fx:id="usernameField" promptText="Username" />
-   <PasswordField fx:id="passwordField" promptText="Password" />
-   <Button text="Login" onAction="#handleLogin" />
-</VBox>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+
+<!--
+  Final simpler approach:
+  1. Gradient background (no external images).
+  2. A red rectangle, semi-transparent, behind the card as a design element.
+  3. White card with a big bold red title.
+  4. Large inputs and red login button.
+-->
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.example.universitymanagementsystem.LoginController"
+           style="
+               -fx-background-color: linear-gradient(to bottom, #FFFFFF, #FAFAFA);
+               -fx-pref-width: 700;
+               -fx-pref-height: 600;">
+
+   <!-- A big, semi-transparent red rectangle as a watermark -->
+   <Rectangle width="500"
+              height="500"
+              fill="#c8102e"
+              opacity="0.1"
+              arcWidth="100"
+              arcHeight="100"
+              StackPane.alignment="CENTER" />
+
+   <!-- BorderPane for padding around edges -->
+   <BorderPane style="-fx-padding: 40;">
+
+      <!-- (Optional) top area if you want some text or a second shape (remove if not needed) -->
+      <top>
+         <HBox alignment="CENTER">
+            <Text text="University Management System"
+                  style="-fx-font-size: 24; -fx-fill: #333;" />
+         </HBox>
+      </top>
+
+      <!-- Center: White card for login form -->
+      <center>
+         <VBox spacing="20"
+               alignment="CENTER"
+               style="
+                      -fx-background-color: white;
+                      -fx-padding: 35;
+                      -fx-border-radius: 15;
+                      -fx-background-radius: 15;
+                      -fx-border-color: #CCC;
+                      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 15, 0, 0, 8);
+                  ">
+
+            <!-- Big Bold Red Title -->
+            <Text text="University of Guelph"
+                  style="
+                          -fx-font-size: 36;
+                          -fx-font-weight: bold;
+                          -fx-fill: #c8102e;
+                      "/>
+
+            <!-- Subtitle -->
+            <Text text="Login Portal"
+                  style="
+                          -fx-font-size: 18;
+                          -fx-fill: #555;
+                      "/>
+
+            <!-- Username Field -->
+            <TextField fx:id="usernameField"
+                       promptText="Username"
+                       style="
+                               -fx-font-size: 16;
+                               -fx-padding: 12;
+                               -fx-border-radius: 5;
+                               -fx-background-radius: 5;
+                               -fx-border-color: #AAA;
+                           "/>
+
+            <!-- Password Field -->
+            <PasswordField fx:id="passwordField"
+                           promptText="Password"
+                           style="
+                                  -fx-font-size: 16;
+                                  -fx-padding: 12;
+                                  -fx-border-radius: 5;
+                                  -fx-background-radius: 5;
+                                  -fx-border-color: #AAA;
+                              "/>
+
+            <!-- Login Button -->
+            <Button text="Login"
+                    onAction="#handleLogin"
+                    style="
+                            -fx-background-color: #c8102e;
+                            -fx-text-fill: white;
+                            -fx-font-size: 16;
+                            -fx-font-weight: bold;
+                            -fx-padding: 12 25;
+                            -fx-border-radius: 5;
+                            -fx-background-radius: 5;
+                        "/>
+         </VBox>
+      </center>
+   </BorderPane>
+</StackPane>
