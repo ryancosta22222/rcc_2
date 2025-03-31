@@ -3,23 +3,20 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:id="mainLayout"
-            fx:controller="com.example.universitymanagementsystem.UserMainController">
+<BorderPane fx:id="mainLayout" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.UserMainController">
     <left>
         <VBox spacing="10" style="-fx-background-color: #34495E; -fx-padding: 10;">
-            <Label text="User Menu" style="-fx-text-fill: white; -fx-font-size: 16px;"/>
-            <Button fx:id="dashboardBtn" text="Dashboard" onAction="#loadDashboard" style="-fx-pref-width: 150;"/>
-            <Button fx:id="courseMgmtBtn" text="Courses" onAction="#loadCourseManagement" style="-fx-pref-width: 150;"/>
-            <Button fx:id="eventMgmtBtn" text="Events" onAction="#loadEventManagement" style="-fx-pref-width: 150;"/>
-            <Button fx:id="profileBtn" text="Profile" onAction="#loadProfile" style="-fx-pref-width: 150;"/>
-            <!-- NEW: Faculty Profiles Button -->
-            <Button fx:id="facultyBtn" text="Faculty Profiles" onAction="#loadFacultyProfiles" style="-fx-pref-width: 150;"/>
-            <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout" style="-fx-pref-width: 150;"/>
+            <Button fx:id="dashboardBtn" text="Dashboard" onAction="#loadDashboard" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <Button fx:id="courseMgmtBtn" text="Courses" onAction="#loadCourseManagement" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <Button fx:id="eventMgmtBtn" text="Events" onAction="#loadEventManagement" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <Button fx:id="profileBtn" text="Profile" onAction="#loadProfile" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <Button fx:id="facultyBtn" text="Faculty Profiles" onAction="#loadFacultyProfiles" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <!-- NEW: Subjects button on the left navigation -->
+            <Button fx:id="subjectsBtn" text="Subjects" onAction="#loadSubjects" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
+            <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout" style="-fx-pref-width: 150; -fx-text-fill: white;"/>
         </VBox>
     </left>
     <center>
-        <!-- Content loaded here by the controller -->
+        <!-- The center area is where your views will be loaded -->
     </center>
 </BorderPane>

@@ -1,5 +1,8 @@
 package com.example.universitymanagementsystem;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class Course {
     private String courseCode;
     private String courseName;
@@ -10,6 +13,7 @@ public class Course {
     private String finalExamDateTime;
     private String location;
     private String teacherName;
+    private ObservableList<String> enrolledStudents = FXCollections.observableArrayList();
 
     public Course(String courseCode, String courseName, String subjectCode, String section,
                   int capacity, String lectureTime, String finalExamDateTime, String location, String teacherName) {
@@ -24,6 +28,7 @@ public class Course {
         this.teacherName = teacherName;
     }
 
+    // Getters
     public String getCourseCode() { return courseCode; }
     public String getCourseName() { return courseName; }
     public String getSubjectCode() { return subjectCode; }
@@ -33,4 +38,26 @@ public class Course {
     public String getFinalExamDateTime() { return finalExamDateTime; }
     public String getLocation() { return location; }
     public String getTeacherName() { return teacherName; }
+
+    // Setters
+    public void setCourseCode(String courseCode) { this.courseCode = courseCode; }
+    public void setCourseName(String courseName) { this.courseName = courseName; }
+    public void setSubjectCode(String subjectCode) { this.subjectCode = subjectCode; }
+    public void setSection(String section) { this.section = section; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public void setLectureTime(String lectureTime) { this.lectureTime = lectureTime; }
+    public void setFinalExamDateTime(String finalExamDateTime) { this.finalExamDateTime = finalExamDateTime; }
+    public void setLocation(String location) { this.location = location; }
+    public void setTeacherName(String teacherName) { this.teacherName = teacherName; }
+
+    // Enrollment management methods
+    public ObservableList<String> getEnrolledStudents() { return enrolledStudents; }
+    public void enrollStudent(String studentId) {
+        if (!enrolledStudents.contains(studentId) && enrolledStudents.size() < capacity) {
+            enrolledStudents.add(studentId);
+        }
+    }
+    public void removeStudent(String studentId) {
+        enrolledStudents.remove(studentId);
+    }
 }

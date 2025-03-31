@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.CourseManagementStudentController">
+    <top>
+        <Label text="Course Management (Student)" style="-fx-font-size: 18px; -fx-padding: 10;"/>
+    </top>
+    <center>
+        <TableView fx:id="courseTable">
+            <columns>
+                <TableColumn fx:id="courseCodeColumn" text="Course Code" prefWidth="80"/>
+                <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="150"/>
+                <TableColumn fx:id="subjectCodeColumn" text="Subject" prefWidth="80"/>
+                <TableColumn fx:id="sectionColumn" text="Section" prefWidth="80"/>
+                <TableColumn fx:id="teacherNameColumn" text="Teacher" prefWidth="120"/>
+                <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="80"/>
+                <TableColumn fx:id="lectureTimeColumn" text="Lecture Time" prefWidth="120"/>
+                <TableColumn fx:id="finalExamColumn" text="Final Exam" prefWidth="120"/>
+                <TableColumn fx:id="locationColumn" text="Location" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </center>
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <Button fx:id="viewMyEnrollmentsBtn" text="View My Enrollments" onAction="#handleViewMyEnrollments"/>
+        </HBox>
+    </bottom>
+</BorderPane>

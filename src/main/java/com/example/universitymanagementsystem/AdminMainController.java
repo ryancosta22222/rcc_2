@@ -38,7 +38,8 @@ public class AdminMainController {
 
     @FXML
     private void loadCourseManagement(ActionEvent event) {
-        loadCenter("/fxml/CourseManagement.fxml");
+        // Updated to load the admin-specific Course Management view.
+        loadCenter("/fxml/CourseManagementAdmin.fxml");
     }
 
     @FXML
@@ -65,17 +66,17 @@ public class AdminMainController {
             Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(login));
             stage.show();
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Helper method to load an FXML file into the center of the BorderPane
+    // Helper method to load an FXML file into the center of the BorderPane.
     private void loadCenter(String fxmlPath) {
         try {
             Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
             mainLayout.setCenter(node);
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
