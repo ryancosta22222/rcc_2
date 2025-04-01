@@ -23,6 +23,7 @@ public class UserMainController {
 
     @FXML
     private void loadDashboard(ActionEvent event) {
+        System.out.println("Loading Dashboard...");
         loadCenter("/fxml/UserDashboard.fxml");
     }
 
@@ -65,9 +66,14 @@ public class UserMainController {
 
     private void loadCenter(String fxmlPath) {
         try {
-            Node node = FXMLLoader.load(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            if (loader.getLocation() == null) {
+                throw new IOException("FXML file not found: " + fxmlPath);
+            }
+            Node node = loader.load();
             mainLayout.setCenter(node);
         } catch (IOException e) {
+            System.err.println("Error loading FXML file: " + fxmlPath);
             e.printStackTrace();
         }
     }

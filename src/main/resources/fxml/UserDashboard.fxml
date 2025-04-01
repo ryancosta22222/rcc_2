@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.universitymanagementsystem.UserDashboardController"
-      alignment="CENTER" spacing="10">
-    <Label text="User Dashboard" style="-fx-font-size: 20px;"/>
-    <Button text="View Courses" onAction="#openCourseManagement"/>
-    <Button text="View Events" onAction="#openEventManagement"/>
-    <!-- New Button for viewing subjects -->
-    <Button text="View Subjects" onAction="#openSubjects"/>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.UserDashboardController"
+      alignment="CENTER" spacing="20">
+
+    <!-- Title Section -->
+    <Label text="User Dashboard" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <!-- Progress Section -->
+    <Label text="Progress:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <Label fx:id="progressLabel" text="Loading progress..." style="-fx-font-size: 14px;"/>
+
+    <!-- Upcoming Courses Section -->
+    <Label text="Upcoming Courses:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <TableView fx:id="coursesTableView" style="-fx-pref-width: 400px;">
+        <!-- Table columns for courses should be defined here -->
+    </TableView>
+
+    <!-- Registered Events Section -->
+    <Label text="Registered Events:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    <TableView fx:id="eventsTableView" style="-fx-pref-width: 400px;">
+        <!-- Table columns for events should be defined here -->
+    </TableView>
+
+    <!-- Navigation Buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="View Courses" onAction="#openCourseManagement"/>
+        <Button text="View Events" onAction="#openEventManagement"/>
+        <Button text="View Subjects" onAction="#openSubjects"/>
+    </HBox>
 </VBox>
