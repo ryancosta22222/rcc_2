@@ -1,5 +1,7 @@
 package com.example.universitymanagementsystem;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -18,6 +20,9 @@ public class Event {
 
     // Track who registered (in this simple example, store just the student username)
     private final ObservableList<String> registeredStudents = FXCollections.observableArrayList();
+
+    // Integer property to track the count of registered students
+    private final IntegerProperty registeredStudentCount = new SimpleIntegerProperty(this, "registeredStudentCount", 0);
 
     public Event(String eventCode, String eventName, String description, String headerImagePath,
                  String location, String dateTime, int capacity, String cost) {
@@ -66,4 +71,28 @@ public class Event {
     public boolean canRegister() {
         return registeredStudents.size() < capacity;
     }
+
+    // New method to return the IntegerProperty for registered students count
+    public IntegerProperty registeredStudentCountProperty() {
+        return registeredStudentCount;
+    }
+
+    // Method to update the registered students count
+    public void addStudent(String student) {
+        if (canRegister()) {
+            registeredStudents.add(student);
+            registeredStudentCount.set(registeredStudents.size());  // Update the count
+        }
+    }
+
+    public void removeStudent(String student) {
+        registeredStudents.remove(student);
+        registeredStudentCount.set(registeredStudents.size());  // Update the count
+    }
+
+    // Method to get the count directly
+    public int getRegisteredStudentCount() {
+        return registeredStudentCount.get();
+    }
 }
+

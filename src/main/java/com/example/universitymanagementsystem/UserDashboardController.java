@@ -34,45 +34,71 @@ public class UserDashboardController implements Initializable {
     private TableColumn<Course, String> courseTimeColumn;
 
     @FXML
-    private TableView<?> eventsTableView;
+    private TableColumn<Course, Number> courseCapacityColumn;  // Number of students in the course
+
+    @FXML
+    private TableView<Event> eventsTableView;
+
+    @FXML
+    private TableColumn<Event, String> eventNameColumn;
+
+    @FXML
+    private TableColumn<Event, String> eventTimeColumn;
+
+    @FXML
+    private TableColumn<Event, Number> eventCapacityColumn;  // Number of registered students in the event
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("Initializing Dashboard...");
 
-        // Debugging: Check if TableView and columns are not null
-        System.out.println("coursesTableView: " + coursesTableView);
-        System.out.println("courseNameColumn: " + courseNameColumn);
-        System.out.println("courseTimeColumn: " + courseTimeColumn);
-
-        javafx.application.Platform.runLater(this::loadUpcomingCourses);
+        javafx.application.Platform.runLater(() -> {
+            loadUpcomingCourses();
+            loadRegisteredEvents();
+        });
     }
 
     private void loadProgress() {
-        // Simulate loading progress from a data source, like a database or API
         progressLabel.setText("Progress: 80% Complete");
     }
 
     private void loadUpcomingCourses() {
-        // Convert the list to an ObservableList that JavaFX can track
         ObservableList<Course> upcomingCourses = FXCollections.observableArrayList(CourseDataStore.getCourses());
 
-        // Debug: Check if courses exist
         System.out.println("Loaded Courses: " + upcomingCourses.size());
 
-        // Set the TableColumn properties
         courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         courseTimeColumn.setCellValueFactory(new PropertyValueFactory<>("lectureTime"));
 
-        // Set the items to TableView
+        // Bind the student count to the column using enrolledStudentCountProperty
+        courseCapacityColumn.setCellValueFactory(course ->
+                course.getValue().enrolledStudentCountProperty()
+        );  // Show enrolled students count
+
+        // Debug: Check if the enrolled student count is correctly updating
+        for (Course course : upcomingCourses) {
+            System.out.println("Course: " + course.getCourseName() + " | Enrolled Students: " + course.getEnrolledStudentCount());
+        }
+
         coursesTableView.setItems(upcomingCourses);
-        coursesTableView.refresh();  // 🔥 Forces UI refresh in case data isn't showing
+        coursesTableView.refresh();
     }
 
-
     private void loadRegisteredEvents() {
-        // Simulate loading registered events from a data source
-        // Example: eventsTableView.setItems(eventList);
+        ObservableList<Event> registeredEvents = EventManagementController.getEventList();
+
+        System.out.println("Loaded Events: " + registeredEvents.size());
+
+        eventNameColumn.setCellValueFactory(new PropertyValueFactory<>("eventName"));
+        eventTimeColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
+
+        // Bind the registered student count property to the eventCapacityColumn
+        eventCapacityColumn.setCellValueFactory(event ->
+                event.getValue().registeredStudentCountProperty()
+        );  // Show registered students count
+
+        eventsTableView.setItems(registeredEvents);
+        eventsTableView.refresh();
     }
 
     @FXML
@@ -92,7 +118,7 @@ public class UserDashboardController implements Initializable {
 
     private void navigateTo(ActionEvent event, String fxmlFile) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
-        Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }
