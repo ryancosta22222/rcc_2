@@ -2,6 +2,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -19,6 +20,10 @@
     <!-- Upcoming Courses Section -->
     <Label text="Upcoming Courses:" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
     <TableView fx:id="coursesTableView" style="-fx-pref-width: 400px;">
+        <columns>
+            <TableColumn fx:id="courseNameColumn" text="Course Name"/>
+            <TableColumn fx:id="courseTimeColumn" text="Time"/>
+        </columns>
         <!-- Table columns for courses should be defined here -->
     </TableView>
 
