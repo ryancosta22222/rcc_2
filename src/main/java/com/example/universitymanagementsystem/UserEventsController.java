@@ -18,67 +18,86 @@ public class UserEventsController {
     @FXML private TableColumn<Event, Number> capacityColumn;
 
     @FXML private ListView<String> myRegisteredEventsList;
-    @FXML private Label eventDetailsLabel; // shows details of the selected event
+    @FXML private Label eventDetailsLabel;
     @FXML private Button registerButton;
-    @FXML private ImageView eventHeaderImageView; // displays header image for the event
+    @FXML private ImageView eventHeaderImageView;
 
-    // The student’s own list of registered event codes.
     private ObservableList<String> myRegisteredEventCodes = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        // Disable caching on the ImageView so that images update properly.
-        eventHeaderImageView.setCache(false);
-
         eventCodeColumn.setCellValueFactory(new PropertyValueFactory<>("eventCode"));
         eventNameColumn.setCellValueFactory(new PropertyValueFactory<>("eventName"));
         dateTimeColumn.setCellValueFactory(new PropertyValueFactory<>("dateTime"));
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
         capacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
 
-        // Load the shared event list.
         allEventsTable.setItems(EventManagementController.getEventList());
 
-        // When a student selects an event, update details and load its header image.
-        allEventsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) {
-                String info = "Event: " + newVal.getEventName() + "\n" +
-                        "Code: " + newVal.getEventCode() + "\n" +
-                        "Location: " + newVal.getLocation() + "\n" +
-                        "Date/Time: " + newVal.getDateTime() + "\n" +
-                        "Description: " + newVal.getDescription() + "\n" +
-                        "Capacity: " + newVal.getCapacity() + "\n" +
-                        "Cost: " + newVal.getCost() + "\n" +
-                        "Registered: " + newVal.getRegisteredStudents().size();
-                eventDetailsLabel.setText(info);
+        loadMyRegisteredEvents();
 
-                // Load the header image for the selected event.
-                if (newVal.getHeaderImagePath().startsWith("default")) {
-                    // Load default image from resources under /images/
-                    String imagePath = getClass().getResource("/images/" + newVal.getHeaderImagePath()).toExternalForm();
-                    eventHeaderImageView.setImage(new Image(imagePath, 200, 150, true, true, false));
-                } else {
-                    // Load the image from the absolute file path or URL.
-                    eventHeaderImageView.setImage(new Image(newVal.getHeaderImagePath(), 200, 150, true, true, false));
-                }
-            } else {
-                eventDetailsLabel.setText("");
-                eventHeaderImageView.setImage(null);
-            }
+        allEventsTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> updateEventDetails(newVal));
+
+        myRegisteredEventsList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            Event selected = findEventByCode(newVal);
+            updateEventDetails(selected);
         });
 
-        myRegisteredEventsList.setItems(myRegisteredEventCodes);
-
-        // If an admin somehow logs in here, disable the register button.
         User currentUser = Session.getInstance().getUser();
         if (currentUser != null && "ADMIN".equalsIgnoreCase(currentUser.getRole())) {
             registerButton.setDisable(true);
         }
     }
 
-    /**
-     * Called when the student clicks "Register" for the selected event.
-     */
+    private void loadMyRegisteredEvents() {
+        myRegisteredEventCodes.clear();
+        User currentUser = Session.getInstance().getUser();
+
+        if (currentUser == null) return;
+
+        for (Event event : EventManagementController.getEventList()) {
+            if (event.getRegisteredStudents().contains(currentUser.getUsername())) {
+                myRegisteredEventCodes.add(event.getEventCode());
+            }
+        }
+
+        myRegisteredEventsList.setItems(myRegisteredEventCodes);
+    }
+
+    private Event findEventByCode(String eventCode) {
+        for (Event event : EventManagementController.getEventList()) {
+            if (event.getEventCode().equalsIgnoreCase(eventCode)) {
+                return event;
+            }
+        }
+        return null;
+    }
+
+    private void updateEventDetails(Event event) {
+        if (event != null) {
+            eventDetailsLabel.setText(
+                    "Event: " + event.getEventName() + "\n" +
+                            "Code: " + event.getEventCode() + "\n" +
+                            "Location: " + event.getLocation() + "\n" +
+                            "Date/Time: " + event.getDateTime() + "\n" +
+                            "Description: " + event.getDescription() + "\n" +
+                            "Capacity: " + event.getCapacity() + "\n" +
+                            "Cost: " + event.getCost() + "\n" +
+                            "Registered: " + event.getRegisteredStudents().size()
+            );
+
+            if (event.getHeaderImagePath().startsWith("default")) {
+                String imagePath = getClass().getResource("/images/" + event.getHeaderImagePath()).toExternalForm();
+                eventHeaderImageView.setImage(new Image(imagePath, 200, 150, true, true, false));
+            } else {
+                eventHeaderImageView.setImage(new Image(event.getHeaderImagePath(), 200, 150, true, true, false));
+            }
+        } else {
+            eventDetailsLabel.setText("Select an event to view details.");
+            eventHeaderImageView.setImage(null);
+        }
+    }
+
     @FXML
     private void handleRegisterForEvent() {
         User currentUser = Session.getInstance().getUser();
@@ -94,14 +113,12 @@ public class UserEventsController {
         }
 
         if (!selectedEvent.canRegister()) {
-            showAlert(Alert.AlertType.WARNING, "Capacity Reached",
-                    "Sorry, this event has reached its maximum capacity.");
+            showAlert(Alert.AlertType.WARNING, "Capacity Reached", "Sorry, this event has reached its maximum capacity.");
             return;
         }
 
         if (selectedEvent.getRegisteredStudents().contains(currentUser.getUsername())) {
-            showAlert(Alert.AlertType.INFORMATION, "Already Registered",
-                    "You have already registered for this event.");
+            showAlert(Alert.AlertType.INFORMATION, "Already Registered", "You have already registered for this event.");
             return;
         }
 
@@ -109,13 +126,9 @@ public class UserEventsController {
         myRegisteredEventCodes.add(selectedEvent.getEventCode());
         sendConfirmationEmail(currentUser.getUsername(), selectedEvent);
 
-        showAlert(Alert.AlertType.INFORMATION, "Registration Successful",
-                "You have been registered for: " + selectedEvent.getEventName());
+        showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "You have been registered for: " + selectedEvent.getEventName());
     }
 
-    /**
-     * Placeholder for sending a confirmation email.
-     */
     private void sendConfirmationEmail(String studentUsername, Event event) {
         System.out.println("Sending confirmation email to " + studentUsername + " for event " + event.getEventCode());
     }
@@ -128,3 +141,4 @@ public class UserEventsController {
         alert.showAndWait();
     }
 }
+
