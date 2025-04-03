@@ -6,16 +6,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class StudentManagementController {
 
@@ -204,6 +201,49 @@ public class StudentManagementController {
             showAlert(Alert.AlertType.ERROR, "Error", "Could not open student profile.");
         }
     }
+
+    @FXML
+    private void handleAddGrade() {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to add grades.");
+            return;
+        }
+
+        TextInputDialog courseDialog = new TextInputDialog();
+        courseDialog.setTitle("Course Name");
+        courseDialog.setHeaderText("Enter the course name:");
+        courseDialog.setContentText("Course:");
+
+        Optional<String> courseResult = courseDialog.showAndWait();
+        if (!courseResult.isPresent() || courseResult.get().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Invalid Input", "Please enter a valid course name.");
+            return;
+        }
+        String courseName = courseResult.get().trim();
+
+        TextInputDialog gradeDialog = new TextInputDialog();
+        gradeDialog.setTitle("Add Grade");
+        gradeDialog.setHeaderText("Enter the grade for " + courseName);
+        gradeDialog.setContentText("Grade (0-100):");
+
+        Optional<String> gradeResult = gradeDialog.showAndWait();
+        gradeResult.ifPresent(gradeStr -> {
+            try {
+                double grade = Double.parseDouble(gradeStr);
+                if (grade < 0 || grade > 100) {
+                    showAlert(Alert.AlertType.WARNING, "Invalid Grade", "Please enter a grade between 0 and 100.");
+                    return;
+                }
+
+                selectedStudent.addGrade(courseName, grade);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Grade added successfully!");
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid number.");
+            }
+        });
+    }
+
+
 
 
 }

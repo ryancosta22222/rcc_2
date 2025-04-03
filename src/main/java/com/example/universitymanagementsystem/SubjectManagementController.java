@@ -194,4 +194,5 @@ public class SubjectManagementController {
         public String getCode() { return code; }
         public String getName() { return name; }
     }
+
 }

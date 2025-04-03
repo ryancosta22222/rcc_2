@@ -45,7 +45,10 @@
         </VBox>
     </children>
 
-    <Button fx:id="viewProfileBtn" layoutX="600" layoutY="400" text="View Profile"
+    <Button fx:id="viewProfileBtn" layoutX="600" layoutY="480" text="View Profile"
             onAction="#handleViewProfile" style="-fx-font-size: 12px;"/>
+
+    <Button text="Add Grade" layoutX="500" layoutY="480" onAction="#handleAddGrade"/>
+
 
 </AnchorPane>

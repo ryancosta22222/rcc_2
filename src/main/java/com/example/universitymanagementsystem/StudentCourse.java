@@ -5,32 +5,28 @@ public class StudentCourse {
     private String courseName;
     private int credits;
     private double gradePoints;
+    private boolean isCompleted; // ✅ Added
 
     public StudentCourse(String courseId, String courseName, int credits) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.credits = credits;
-        this.gradePoints = 0.0; // Default grade points, can be updated later
+        this.gradePoints = 0.0;
+        this.isCompleted = false; // Default to not completed
     }
 
-    // Getters and Setters
-    public String getCourseId() {
-        return courseId;
-    }
+    public String getCourseId() { return courseId; }
+    public String getCourseName() { return courseName; }
+    public int getCredits() { return credits; }
+    public double getGradePoints() { return gradePoints; }
+    public void setGradePoints(double gradePoints) { this.gradePoints = gradePoints; }
 
-    public String getCourseName() {
-        return courseName;
-    }
+    public boolean isCompleted() { return isCompleted; }  // ✅ Fix: Added method
+    public void setCompleted(boolean completed) { this.isCompleted = completed; } // ✅ Setter
 
-    public int getCredits() {
-        return credits;
-    }
+    private boolean isEnrolled; // New field
 
-    public double getGradePoints() {
-        return gradePoints;
-    }
+    public boolean isEnrolled() { return isEnrolled; }
+    public void setEnrolled(boolean enrolled) { this.isEnrolled = enrolled; }
 
-    public void setGradePoints(double gradePoints) {
-        this.gradePoints = gradePoints;
-    }
 }
