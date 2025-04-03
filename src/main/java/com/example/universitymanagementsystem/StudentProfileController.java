@@ -1,11 +1,11 @@
 package com.example.universitymanagementsystem;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 public class StudentProfileController {
 
@@ -18,15 +18,17 @@ public class StudentProfileController {
     @FXML private Label graduationStatusLabel;
     @FXML private Label completedCreditsLabel;
     @FXML private Label remainingCreditsLabel;
-    @FXML private AnchorPane courseEnrollmentPane;  // The course enrollment pane
-    @FXML private ListView<String> availableCoursesListView;  // ListView to display courses
 
-    private Stage stage;
+    @FXML private AnchorPane courseEnrollmentPane;
+    @FXML private ListView<String> availableCoursesListView;
+
     private Student student;
+    private Stage profileStage;
+    private ObservableList<StudentCourse> availableCourses = FXCollections.observableArrayList();
 
-    public void setStudentData(Student student, Stage stage) {
+    public void setStudentData(Student student, Stage profileStage) {
         this.student = student;
-        this.stage = stage;
+        this.profileStage = profileStage;
 
         // Set student information
         studentIdLabel.setText(student.getStudentId());
@@ -36,93 +38,86 @@ public class StudentProfileController {
         studentSemesterLabel.setText(student.getCurrentSemester());
         gpaLabel.setText(String.format("%.2f", student.getGpa()));
         graduationStatusLabel.setText(student.getGraduationStatus());
+        completedCreditsLabel.setText("Completed Credits: " + getCompletedCredits());
+        remainingCreditsLabel.setText("Remaining Credits: " + getRemainingCredits());
 
-        // Update credits information
-        updateCredits(student);
-
-        // Populate the available courses ListView
-        populateAvailableCourses();
-    }
-
-    private void updateCredits(Student student) {
-        int completedCredits = 0;
-        int requiredCredits = student.getAcademicLevel().equalsIgnoreCase("undergraduate") ? 120 : 60;
-
-        // Loop through enrolled courses and calculate completed credits
-        for (StudentCourse course : student.getEnrolledCourses()) {
-            if (course.isCompleted()) {
-                completedCredits += course.getCredits();
-            }
-        }
-
-        // Set the labels
-        completedCreditsLabel.setText("Completed Credits: " + completedCredits);
-        remainingCreditsLabel.setText("Remaining Credits: " + Math.max(0, requiredCredits - completedCredits));
-    }
-
-    // Populate the available courses ListView (For demo purposes, we'll use dummy courses)
-    private void populateAvailableCourses() {
-        ObservableList<String> availableCourses = FXCollections.observableArrayList(
-                "CS101 - Introduction to Programming",
-                "CS102 - Data Structures",
-                "MATH101 - Calculus I",
-                "PHYS101 - Physics I"
+        // Sample available courses (in real case, fetch from backend or database)
+        availableCourses.addAll(
+                new StudentCourse("CS101", "Introduction to Programming", 3),
+                new StudentCourse("CS102", "Data Structures", 3),
+                new StudentCourse("MATH101", "Calculus I", 4),
+                new StudentCourse("PHYS101", "Physics I", 4)
         );
 
-        availableCoursesListView.setItems(availableCourses);
+        updateCourseListView();
     }
 
-    // Handle the "Manage Courses" button click
+    private void updateCourseListView() {
+        availableCoursesListView.getItems().clear();
+        for (StudentCourse course : availableCourses) {
+            availableCoursesListView.getItems().add(course.getCourseId() + " - " + course.getCourseName());
+        }
+    }
+
+    private int getCompletedCredits() {
+        int total = 0;
+        for (StudentCourse course : student.getEnrolledCourses()) {
+            if (course.isCompleted()) {
+                total += course.getCredits();
+            }
+        }
+        return total;
+    }
+
+    private int getRemainingCredits() {
+        int required = student.getAcademicLevel().equalsIgnoreCase("undergraduate") ? 120 : 60;
+        return required - getCompletedCredits();
+    }
+
     @FXML
     private void handleManageCourses() {
-        // Toggle the visibility of the course enrollment pane
-        boolean isVisible = courseEnrollmentPane.isVisible();
-        courseEnrollmentPane.setVisible(!isVisible);
+        courseEnrollmentPane.setVisible(!courseEnrollmentPane.isVisible());
     }
 
-
-    // Handle Enroll in Course
     @FXML
     private void handleEnrollInCourse() {
         String selectedCourse = availableCoursesListView.getSelectionModel().getSelectedItem();
+        if (selectedCourse != null) {
+            String courseId = selectedCourse.split(" - ")[0];
+            StudentCourse courseToEnroll = availableCourses.stream()
+                    .filter(c -> c.getCourseId().equals(courseId))
+                    .findFirst()
+                    .orElse(null);
 
-        if (selectedCourse != null && !student.getEnrolledCourses().contains(selectedCourse)) {
-            // Example: Using a fixed course name and credits (replace with dynamic data if necessary)
-            StudentCourse course = new StudentCourse(selectedCourse, selectedCourse, 3);  // Using 3 credits for simplicity
-            student.enrollInCourse(course);  // Add course to student's enrolled courses
-            updateCredits(student);  // Update credits info
-            populateAvailableCourses();  // Refresh available courses list
-        } else {
-            showAlert("Error", "Already Enrolled or No Course Selected");
+            if (courseToEnroll != null && !student.getEnrolledCourses().contains(courseToEnroll)) {
+                student.enrollInCourse(courseToEnroll);
+                showAlert("Enrollment Successful", "Student enrolled in: " + selectedCourse);
+            } else {
+                showAlert("Already Enrolled", "Student is already enrolled in: " + selectedCourse);
+            }
         }
     }
 
-
-    // Handle Unenroll from Course
     @FXML
     private void handleUnenrollFromCourse() {
         String selectedCourse = availableCoursesListView.getSelectionModel().getSelectedItem();
-
-        if (selectedCourse != null && student.getEnrolledCourses().contains(selectedCourse)) {
-            student.unenrollFromCourse(selectedCourse);  // Remove course from student's enrolled courses
-            updateCredits(student);  // Update credits info
-            populateAvailableCourses();  // Refresh available courses list
-        } else {
-            showAlert("Error", "Not Enrolled in This Course or No Course Selected");
+        if (selectedCourse != null) {
+            String courseId = selectedCourse.split(" - ")[0];
+            student.unenrollFromCourse(courseId);
+            showAlert("Unenrollment Successful", "Student unenrolled from: " + selectedCourse);
         }
-    }
-
-    // Show alert
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     @FXML
     private void handleClose() {
-        stage.close();
+        profileStage.close();
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
