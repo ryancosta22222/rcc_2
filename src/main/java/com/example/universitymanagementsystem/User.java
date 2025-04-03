@@ -1,21 +1,37 @@
 package com.example.universitymanagementsystem;
 
-public abstract class User {
+public class User {
     protected String username;
-    protected String password; // For demonstration only.
-    protected String role; // "ADMIN" or "STUDENT"
+    protected String password;
+    protected String role;
 
-    public User(String username, String password, String role){
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
-    public String getUsername(){
+    // Getter and setter methods
+    public String getUsername() {
         return username;
     }
 
-    public String getRole(){
-        return role;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role; // Return the role
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

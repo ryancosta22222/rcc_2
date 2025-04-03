@@ -3,119 +3,248 @@ package com.example.universitymanagementsystem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Optional;
 
 public class StudentManagementController {
 
-    @FXML private TableView<StudentRecord> studentTable;
-    @FXML private TableColumn<StudentRecord, String> studentIdColumn;
-    @FXML private TableColumn<StudentRecord, String> studentNameColumn;
-    @FXML private TableColumn<StudentRecord, String> academicLevelColumn;
-    @FXML private TableColumn<StudentRecord, String> emailColumn;
-    @FXML private TableColumn<StudentRecord, String> currentSemesterColumn;
-
+    @FXML private TextField studentIdField;
     @FXML private TextField studentNameField;
-    @FXML private TextField academicLevelField;
-    @FXML private TextField emailField;
-    @FXML private TextField currentSemesterField;
+    @FXML private TextField studentEmailField;
+    @FXML private TextField studentAcademicLevelField;
+    @FXML private TextField studentSemesterField;
 
-    private ObservableList<StudentRecord> studentList = FXCollections.observableArrayList();
+    // New TextField to show tuition fee
+    @FXML private TextField tuitionField;
+
+    @FXML private Button addStudentBtn;
+    @FXML private Button editStudentBtn;
+    @FXML private Button deleteStudentBtn;
+    @FXML private Button manageTuitionBtn; // Added button to manage tuition fees
+
+    @FXML private TableView<Student> studentTable;
+    @FXML private TableColumn<Student, String> studentIdColumn;
+    @FXML private TableColumn<Student, String> studentNameColumn;
+    @FXML private TableColumn<Student, String> studentEmailColumn;
+    @FXML private TableColumn<Student, String> studentAcademicLevelColumn;
+    @FXML private TableColumn<Student, String> studentSemesterColumn;
+
+    private static ObservableList<Student> studentList = FXCollections.observableArrayList();
+    private Student selectedStudent = null;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         studentIdColumn.setCellValueFactory(new PropertyValueFactory<>("studentId"));
         studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        academicLevelColumn.setCellValueFactory(new PropertyValueFactory<>("academicLevel"));
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        currentSemesterColumn.setCellValueFactory(new PropertyValueFactory<>("currentSemester"));
+        studentEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        studentAcademicLevelColumn.setCellValueFactory(new PropertyValueFactory<>("academicLevel"));
+        studentSemesterColumn.setCellValueFactory(new PropertyValueFactory<>("currentSemester"));
 
         studentTable.setItems(studentList);
 
-        // --- Sample Student Data from UMS ---
-        studentList.addAll(
-                new StudentRecord("S20250001", "Alice Smith", "123 Maple St.", "555-1234", "alice@example.edu", "Undergraduate", "Fall 2025", "default", "ENG101", "", "40%", "default123"),
-                new StudentRecord("S20250002", "Bob Johnson", "456 Oak St.", "555-5678", "bob@example.edu", "Graduate", "Fall 2025", "default", "CS201", "The detection of oil under ice by remote mode conversion of ultrasound", "50%", "default123"),
-                new StudentRecord("S20250003", "Carol Williams", "789 Pine St.", "555-9012", "carol@example.edu", "Graduate", "Fall 2025", "default", "ENGG402, HIST101", "On the economic optimality of marine reserves when fishing damages habitat", "50%", "default123"),
-                new StudentRecord("S20250004", "Lucka Racki", "1767 Jane St.", "439-9966", "lucka@example.edu", "Undergraduate", "Fall 2025", "default", "Bio300", "", "60%", "default123"),
-                new StudentRecord("S20250005", "David Lee", "90 Elm St.", "555-3456", "lee@example.edu", "Undergraduate", "Fall 2025", "default", "HIST101", "-", "50%", "default123"),
-                new StudentRecord("S20250006", "Emily Brown", "111 Oak Ave.", "555-7890", "brown@example.edu", "Graduate", "Fall 2025", "default", "Chem200", "Synthesis and Characterization of Novel Catalysts", "50%", "default123"),
-                new StudentRecord("S20250007", "George Smith", "222 Pine Rd.", "555-2345", "smith@example.edu", "Undergraduate", "Fall 2025", "default", "Music102", "-", "40%", "default123"),
-                new StudentRecord("S20250008", "Helen Jones", "333 Maple Dr.", "555-4567", "jones@example.edu", "Graduate", "Fall 2025", "default", "PSYCHO100, Music102, HIST101", "The Effects of Stress on Cognitive Function", "50%", "default123"),
-                new StudentRecord("S20250009", "Isaac Clark", "444 Cedar Ln.", "555-8901", "clark@example.edu", "Undergraduate", "Fall 2025", "default", "BIo300", "-", "50%", "default123"),
-                new StudentRecord("S20250010", "Jennifer Davis", "555 Oakwood Pl", "555-3456", "davis@example.edu", "Graduate", "Fall 2025", "default", "HIST101", "The Renaissance: Art, Culture, and Society", "20%", "default123")
-        );
+        // Populate fields when a student is selected
+        studentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            selectedStudent = newSelection;
+            if (newSelection != null) {
+                studentIdField.setText(newSelection.getStudentId());
+                studentNameField.setText(newSelection.getName());
+                studentEmailField.setText(newSelection.getEmail());
+                studentAcademicLevelField.setText(newSelection.getAcademicLevel());
+                studentSemesterField.setText(newSelection.getCurrentSemester());
+            }
+        });
+
+        // Disable editing controls for students
+        User currentUser = Session.getInstance().getUser();
+        if (currentUser != null && currentUser.getRole() != null && currentUser.getRole().equalsIgnoreCase("STUDENT")) {
+            addStudentBtn.setDisable(true);
+            editStudentBtn.setDisable(true);
+            deleteStudentBtn.setDisable(true);
+            studentIdField.setDisable(true);
+            studentNameField.setDisable(true);
+            studentEmailField.setDisable(true);
+            studentAcademicLevelField.setDisable(true);
+            studentSemesterField.setDisable(true);
+        }
     }
 
     @FXML
-    private void handleAddStudent(){
+    private void handleAddStudent() {
+        String studentId = studentIdField.getText().trim();
         String name = studentNameField.getText().trim();
-        String level = academicLevelField.getText().trim();
-        String email = emailField.getText().trim();
-        String semester = currentSemesterField.getText().trim();
+        String email = studentEmailField.getText().trim();
+        String academicLevel = studentAcademicLevelField.getText().trim();
+        String currentSemester = studentSemesterField.getText().trim();
 
-        if(name.isEmpty() || level.isEmpty() || email.isEmpty() || semester.isEmpty()){
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Validation Error");
-            alert.setHeaderText("Missing Data");
-            alert.setContentText("Name, academic level, email, and semester are required.");
-            alert.showAndWait();
+        if (studentId.isEmpty() || name.isEmpty() || email.isEmpty() || academicLevel.isEmpty() || currentSemester.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "All fields are required.");
             return;
         }
-        // Auto–generate an ID for demonstration.
-        String id = "S" + System.currentTimeMillis();
-        studentList.add(new StudentRecord(id, name, "N/A", "N/A", email, level, semester, "default", "", "", "0%", "default123"));
-        studentNameField.clear();
-        academicLevelField.clear();
-        emailField.clear();
-        currentSemesterField.clear();
-    }
 
-    public static class StudentRecord {
-        private final String studentId;
-        private final String name;
-        private final String address;
-        private final String telephone;
-        private final String email;
-        private final String academicLevel;
-        private final String currentSemester;
-        private final String profilePhoto;
-        private final String subjectsRegistered;
-        private final String thesisTitle;
-        private final String progress;
-        private final String password;
-
-        public StudentRecord(String studentId, String name, String address, String telephone, String email,
-                             String academicLevel, String currentSemester, String profilePhoto,
-                             String subjectsRegistered, String thesisTitle, String progress, String password) {
-            this.studentId = studentId;
-            this.name = name;
-            this.address = address;
-            this.telephone = telephone;
-            this.email = email;
-            this.academicLevel = academicLevel;
-            this.currentSemester = currentSemester;
-            this.profilePhoto = profilePhoto;
-            this.subjectsRegistered = subjectsRegistered;
-            this.thesisTitle = thesisTitle;
-            this.progress = progress;
-            this.password = password;
+        // Check for unique student ID
+        for (Student s : studentList) {
+            if (s.getStudentId().equals(studentId)) {
+                showAlert(Alert.AlertType.WARNING, "Validation Error", "Student ID must be unique.");
+                return;
+            }
         }
 
-        public String getStudentId(){ return studentId; }
-        public String getName(){ return name; }
-        public String getAddress(){ return address; }
-        public String getTelephone(){ return telephone; }
-        public String getEmail(){ return email; }
-        public String getAcademicLevel(){ return academicLevel; }
-        public String getCurrentSemester(){ return currentSemester; }
-        public String getProfilePhoto(){ return profilePhoto; }
-        public String getSubjectsRegistered(){ return subjectsRegistered; }
-        public String getThesisTitle(){ return thesisTitle; }
-        public String getProgress(){ return progress; }
-        public String getPassword(){ return password; }
+        Student newStudent = new Student("defaultUsername", "defaultPassword", studentId, name, email, academicLevel, currentSemester);
+        studentList.add(newStudent); // Add the new student to the list
+        clearInputFields();
     }
+
+    @FXML
+    private void handleEditStudent() {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to edit.");
+            return;
+        }
+
+        String studentId = studentIdField.getText().trim();
+        String name = studentNameField.getText().trim();
+        String email = studentEmailField.getText().trim();
+        String academicLevel = studentAcademicLevelField.getText().trim();
+        String currentSemester = studentSemesterField.getText().trim();
+
+        if (studentId.isEmpty() || name.isEmpty() || email.isEmpty() || academicLevel.isEmpty() || currentSemester.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "All fields are required.");
+            return;
+        }
+
+        int index = studentList.indexOf(selectedStudent);
+        if (index >= 0) {
+            studentList.set(index, new Student(selectedStudent.getUsername(), selectedStudent.getPassword(), studentId, name, email, academicLevel, currentSemester));
+        }
+    }
+
+    @FXML
+    private void handleDeleteStudent() {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to delete.");
+            return;
+        }
+        studentList.remove(selectedStudent);
+        selectedStudent = null;
+        clearInputFields();
+    }
+
+    // New method to handle Tuition Fee management
+    @FXML
+    private void handleManageTuition(ActionEvent event) {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to manage tuition.");
+            return;
+        }
+
+        String academicLevel = selectedStudent.getAcademicLevel().trim();
+        if (academicLevel.equalsIgnoreCase("undergraduate")) {
+            tuitionField.setText("$5000");
+        } else if (academicLevel.equalsIgnoreCase("graduate")) {
+            tuitionField.setText("$4000");
+        } else {
+            tuitionField.setText("N/A");
+        }
+    }
+
+    private void clearInputFields() {
+        studentIdField.clear();
+        studentNameField.clear();
+        studentEmailField.clear();
+        studentAcademicLevelField.clear();
+        studentSemesterField.clear();
+        studentTable.getSelectionModel().clearSelection();
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    // Public static getter to allow other modules to access the student list
+    public static ObservableList<Student> getStudentList() {
+        return studentList;
+    }
+    @FXML
+    private void handleViewProfile() {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to view their profile.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StudentProfile.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the student data
+            StudentProfileController controller = loader.getController();
+            Stage profileStage = new Stage();
+            controller.setStudentData(selectedStudent, profileStage);
+
+            // Show the profile window
+            profileStage.setScene(new Scene(root));
+            profileStage.setTitle("Student Profile");
+            profileStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Could not open student profile.");
+        }
+    }
+
+    @FXML
+    private void handleAddGrade() {
+        if (selectedStudent == null) {
+            showAlert(Alert.AlertType.WARNING, "No Selection", "Please select a student to add grades.");
+            return;
+        }
+
+        TextInputDialog courseDialog = new TextInputDialog();
+        courseDialog.setTitle("Course Name");
+        courseDialog.setHeaderText("Enter the course name:");
+        courseDialog.setContentText("Course:");
+
+        Optional<String> courseResult = courseDialog.showAndWait();
+        if (!courseResult.isPresent() || courseResult.get().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Invalid Input", "Please enter a valid course name.");
+            return;
+        }
+        String courseName = courseResult.get().trim();
+
+        TextInputDialog gradeDialog = new TextInputDialog();
+        gradeDialog.setTitle("Add Grade");
+        gradeDialog.setHeaderText("Enter the grade for " + courseName);
+        gradeDialog.setContentText("Grade (0-100):");
+
+        Optional<String> gradeResult = gradeDialog.showAndWait();
+        gradeResult.ifPresent(gradeStr -> {
+            try {
+                double grade = Double.parseDouble(gradeStr);
+                if (grade < 0 || grade > 100) {
+                    showAlert(Alert.AlertType.WARNING, "Invalid Grade", "Please enter a grade between 0 and 100.");
+                    return;
+                }
+
+                selectedStudent.addGrade(courseName, grade);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Grade added successfully!");
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid number.");
+            }
+        });
+    }
+
+
+
+
 }
+
