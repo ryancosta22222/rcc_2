@@ -13,6 +13,8 @@ public class Student extends User {
     private List<Grade> grades;
     private double gpa;
 
+    private String profileImagePath; // ✅ new field for image
+
     public Student(String username, String password, String studentId, String name, String email, String academicLevel, String currentSemester) {
         super(username, password);
         this.studentId = studentId;
@@ -23,6 +25,7 @@ public class Student extends User {
         this.enrolledCourses = new ArrayList<>();
         this.grades = new ArrayList<>();
         this.gpa = 0.0;
+        this.profileImagePath = null;
     }
 
     public String getStudentId() { return studentId; }
@@ -33,8 +36,21 @@ public class Student extends User {
     public List<StudentCourse> getEnrolledCourses() { return enrolledCourses; }
     public double getGpa() { return gpa; }
 
+    // ✅ Added for profile picture support
+    public String getProfileImagePath() {
+        return profileImagePath;
+    }
+
+    public void setProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
+
+    // ✅ Getter for grades (used in student module)
+    public List<Grade> getGrades() {
+        return grades;
+    }
+
     public void enrollInCourse(StudentCourse course) {
-        // Prevent duplicate enrollment
         if (!enrolledCourses.contains(course)) {
             enrolledCourses.add(course);
         }

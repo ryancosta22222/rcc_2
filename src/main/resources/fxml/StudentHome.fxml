@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.StudentHomeController" style="-fx-padding: 30;">
+    <Label text="Student Module" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+    <!-- ID input and search button -->
+    <TextField fx:id="studentIdInput" promptText="Enter Student ID" />
+    <Button fx:id="searchBtn" text="Search" onAction="#handleSearchStudent" />
+
+    <!-- Feature Buttons -->
+    <Button text="View Profile" onAction="#handleViewProfile" />
+    <Button text="Edit Profile" onAction="#handleEditProfile" />
+    <Button text="Enrolled Courses" onAction="#handleViewCourses" />
+    <Button text="View Grades" onAction="#handleViewGrades" />
+    <Button text="Tuition Status" onAction="#handleViewTuition" />
+</VBox>
