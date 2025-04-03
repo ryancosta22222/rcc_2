@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.StudentProfileController">
+    <Label text="Student Profile" layoutX="150" layoutY="10" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <Label text="Student ID:" layoutX="20" layoutY="50" />
+    <Label fx:id="studentIdLabel" layoutX="120" layoutY="50" />
+
+    <Label text="Name:" layoutX="20" layoutY="80" />
+    <Label fx:id="studentNameLabel" layoutX="120" layoutY="80" />
+
+    <Label text="Email:" layoutX="20" layoutY="110" />
+    <Label fx:id="studentEmailLabel" layoutX="120" layoutY="110" />
+
+    <Label text="Academic Level:" layoutX="20" layoutY="140" />
+    <Label fx:id="studentAcademicLevelLabel" layoutX="120" layoutY="140" />
+
+    <Label text="Current Semester:" layoutX="20" layoutY="170" />
+    <Label fx:id="studentSemesterLabel" layoutX="120" layoutY="170" />
+
+    <Button text="Close" layoutX="150" layoutY="210" onAction="#handleClose"/>
+</AnchorPane>

@@ -1,23 +1,23 @@
 package com.example.universitymanagementsystem;
 
 public class Session {
-    private static Session instance = null;
-    private User currentUser;
+    private static Session instance;
+    private User user;
 
     private Session() {}
 
     public static Session getInstance() {
-        if(instance == null){
+        if (instance == null) {
             instance = new Session();
         }
         return instance;
     }
 
-    public void setUser(User user){
-        this.currentUser = user;
+    public User getUser() {
+        return user;
     }
 
-    public User getUser(){
-        return currentUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

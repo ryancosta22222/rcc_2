@@ -77,4 +77,11 @@ public class UserMainController {
     public void openCourseManagement(ActionEvent event) throws IOException {
         loadCenter("/fxml/CourseManagement.fxml");
     }
+
+    @FXML
+    private void loadStudentManagement(ActionEvent event) {
+        loadCenter("/fxml/StudentManagement.fxml");
+    }
+
 }
+

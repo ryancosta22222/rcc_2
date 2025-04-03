@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.universitymanagementsystem.AdminController">
+    <ListView fx:id="studentsListView" />
+
+    <!-- Fields for enrolling a student -->
+    <TextField fx:id="studentIdField" promptText="Enter Student ID"/>
+    <TextField fx:id="courseIdField" promptText="Enter Course ID"/>
+    <TextField fx:id="courseNameField" promptText="Enter Course Name"/>
+    <TextField fx:id="courseCreditsField" promptText="Enter Course Credits"/>
+
+    <!-- Buttons for admin actions -->
+    <Button text="Enroll Student in Course" onAction="#handleEnrollStudentInCourse" />
+    <Button text="View Academic Progress" onAction="#handleViewAcademicProgress" />
+</VBox>

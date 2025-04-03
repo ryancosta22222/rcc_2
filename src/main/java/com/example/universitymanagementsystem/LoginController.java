@@ -23,6 +23,7 @@ public class LoginController {
     private final String STUDENT_USERNAME = "student";
     private final String STUDENT_PASSWORD = "student123";
 
+
     @FXML
     public void handleLogin(ActionEvent event) {
         String username = usernameField.getText().trim();
@@ -32,9 +33,12 @@ public class LoginController {
 
         if(username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)){
             user = new Admin(username, password);
+            user.setRole("ADMIN");  // Set the role for admin
             fxmlToLoad = "/fxml/AdminMainLayout.fxml";
         } else if(username.equals(STUDENT_USERNAME) && password.equals(STUDENT_PASSWORD)){
-            user = new Student(username, password);
+            // Create a sample student object with hardcoded details
+            user = new Student(username, password, "S12345", "John Doe", "john@example.com", "Sophomore", "Fall 2025");
+            user.setRole("STUDENT");  // Set the role for student
             fxmlToLoad = "/fxml/UserMainLayout.fxml";
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -58,3 +62,5 @@ public class LoginController {
         }
     }
 }
+
+
