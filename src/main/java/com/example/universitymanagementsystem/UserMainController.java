@@ -6,8 +6,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class UserMainController {
@@ -16,14 +19,41 @@ public class UserMainController {
     private BorderPane mainLayout;
 
     @FXML
+    private VBox sidebar;
+
+    @FXML
+    private Button dashboardBtn;
+    @FXML
+    private Button viewCoursesBtn;
+    @FXML
+    private Button eventMgmtBtn;
+    @FXML
+    private Button profileBtn;
+    @FXML
+    private Button facultyBtn;
+    @FXML
+    private Button subjectsBtn;
+    @FXML
+    private Button studentBtn;
+    @FXML
+    private Button logoutBtn;
+
+    @FXML
     private void initialize() {
         // Load the default view (User Dashboard) into the center area.
         loadCenter("/fxml/UserDashboard.fxml");
+
+        // Show the Student button only if the user is a STUDENT
+        User currentUser = Session.getInstance().getUser();
+        if (currentUser != null && currentUser.getRole().equalsIgnoreCase("STUDENT")) {
+            studentBtn.setVisible(true);
+        } else {
+            studentBtn.setVisible(false);
+        }
     }
 
     @FXML
     private void loadDashboard(ActionEvent event) {
-        System.out.println("Loading Dashboard...");
         loadCenter("/fxml/UserDashboard.fxml");
     }
 
@@ -53,6 +83,11 @@ public class UserMainController {
     }
 
     @FXML
+    private void loadStudentHome(ActionEvent event) {
+        loadCenter("/fxml/StudentHome.fxml");
+    }
+
+    @FXML
     private void handleLogout(ActionEvent event) {
         try {
             Parent login = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
@@ -67,9 +102,6 @@ public class UserMainController {
     private void loadCenter(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            if (loader.getLocation() == null) {
-                throw new IOException("FXML file not found: " + fxmlPath);
-            }
             Node node = loader.load();
             mainLayout.setCenter(node);
         } catch (IOException e) {
@@ -88,6 +120,4 @@ public class UserMainController {
     private void loadStudentManagement(ActionEvent event) {
         loadCenter("/fxml/StudentManagement.fxml");
     }
-
 }
-
