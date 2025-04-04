@@ -36,7 +36,7 @@ public class Student extends User {
     public List<StudentCourse> getEnrolledCourses() { return enrolledCourses; }
     public double getGpa() { return gpa; }
 
-    // ✅ Added for profile picture support
+    //  Added for profile picture support
     public String getProfileImagePath() {
         return profileImagePath;
     }
@@ -45,7 +45,7 @@ public class Student extends User {
         this.profileImagePath = profileImagePath;
     }
 
-    // ✅ Getter for grades (used in student module)
+    //  Getter for grades (used in student module)
     public List<Grade> getGrades() {
         return grades;
     }
