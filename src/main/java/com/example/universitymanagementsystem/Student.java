@@ -13,7 +13,7 @@ public class Student extends User {
     private List<Grade> grades;
     private double gpa;
 
-    private String profileImagePath; // ✅ new field for image
+    private String profileImagePath;
 
     public Student(String username, String password, String studentId, String name, String email, String academicLevel, String currentSemester) {
         super(username, password);
