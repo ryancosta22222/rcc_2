@@ -22,9 +22,6 @@ import java.util.ResourceBundle;
 public class UserDashboardController implements Initializable {
 
     @FXML
-    private Label progressLabel;
-
-    @FXML
     private TableView<Course> coursesTableView;
 
     @FXML
@@ -56,10 +53,6 @@ public class UserDashboardController implements Initializable {
             loadUpcomingCourses();
             loadRegisteredEvents();
         });
-    }
-
-    private void loadProgress() {
-        progressLabel.setText("Progress: 80% Complete");
     }
 
     private void loadUpcomingCourses() {
