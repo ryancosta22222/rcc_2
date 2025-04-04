@@ -13,7 +13,7 @@
             <Button fx:id="facultyBtn" text="Faculty Profiles" onAction="#loadFacultyProfiles" style="-fx-pref-width: 150; -fx-text-fill: white; -fx-background-color: transparent;"/>
             <Button fx:id="subjectsBtn" text="Subjects" onAction="#loadSubjects" style="-fx-pref-width: 150; -fx-text-fill: white; -fx-background-color: transparent;"/>
 
-            <!-- ✅ NEW: Student button -->
+            <!-- NEW: Student button -->
             <Button fx:id="studentBtn" text="Student" onAction="#loadStudentHome" style="-fx-pref-width: 150; -fx-text-fill: white; -fx-background-color: transparent;"/>
 
             <Button fx:id="logoutBtn" text="Logout" onAction="#handleLogout" style="-fx-pref-width: 150; -fx-text-fill: white; -fx-background-color: transparent;"/>
