@@ -5,7 +5,7 @@ public class StudentCourse {
     private String courseName;
     private int credits;
     private double gradePoints;
-    private boolean isCompleted; // ✅ Added
+    private boolean isCompleted; //  Added
 
     public StudentCourse(String courseId, String courseName, int credits) {
         this.courseId = courseId;
@@ -21,8 +21,8 @@ public class StudentCourse {
     public double getGradePoints() { return gradePoints; }
     public void setGradePoints(double gradePoints) { this.gradePoints = gradePoints; }
 
-    public boolean isCompleted() { return isCompleted; }  // ✅ Fix: Added method
-    public void setCompleted(boolean completed) { this.isCompleted = completed; } // ✅ Setter
+    public boolean isCompleted() { return isCompleted; }  //  Fix: Added method
+    public void setCompleted(boolean completed) { this.isCompleted = completed; } //  Setter
 
     private boolean isEnrolled; // New field
 
